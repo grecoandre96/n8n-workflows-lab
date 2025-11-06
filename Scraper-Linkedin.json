@@ -1,0 +1,1773 @@
+{
+  "name": "esercizio4",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/customsearch/v1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "cx",
+              "value": "269909e71928f4739"
+            },
+            {
+              "name": "q",
+              "value": "={{ 'site:' + $json.site + ' inurl:' + $json.path + ' -inurl:/company/ -inurl:/jobs/ ' + $json.keyword }}"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "start",
+                    "value": "={{$response.body.queries.nextPage[0].startIndex }}"
+                  }
+                ]
+              },
+              "limitPagesFetched": true,
+              "maxRequests": 3
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -864,
+        176
+      ],
+      "id": "c0869302-8922-43eb-b204-9a6bf4298c97",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "Wtydf1hPm8K9Ovup",
+          "name": "Query Auth account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9f85143d-b1b2-4ba3-a6ce-9661775bd568",
+              "name": "keyword",
+              "value": "automation engineer italy",
+              "type": "string"
+            },
+            {
+              "id": "80f7a8e7-f31d-48a8-9601-aabbd81dbeb6",
+              "name": "site",
+              "value": "linkedin.com",
+              "type": "string"
+            },
+            {
+              "id": "3288a94b-e7d1-4f94-96cd-e2f40899ba38",
+              "name": "path",
+              "value": "/in/",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1104,
+        176
+      ],
+      "id": "149ae5f6-9457-4640-8256-2864c1d93cbd",
+      "name": "Edit Fields",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1312,
+        176
+      ],
+      "id": "55e3406b-47d8-48ea-9e40-6c94948f47ea",
+      "name": "Schedule Trigger",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sei un data formatter professionale. Ricevi dati grezzi provenienti da risultati Google di profili LinkedIn. Il tuo compito è restituire SOLO JSON valido e minimamente necessario per l’ingestione in Airtable, con queste chiavi esatte e in questo ordine: Name, company, source, profileUrl. Non aggiungere testo fuori dal JSON, commenti o campi extra. Se un valore non è chiaramente deducibile, usa una stringa vuota \"\" (mai null). Non inventare informazioni. Capitalizza correttamente i nomi propri. Mantieni invariato l’URL.\n\nUser prompt (usa come Expression nel campo del messaggio utente):\nEcco i dati grezzi del profilo:\n\nrawTitle: {{$json.rawTitle}}\nrawSnippet: {{$json.rawSnippet}}\nprofileUrl: {{$json.profileUrl}}\nsource: {{$json.source}}\nIstruzioni di formattazione:\n\nName: estrai il nome completo dal rawTitle (o dall’URL /in/ come fallback), con capitalizzazione corretta. Evita di includere ruoli/qualifiche nel nome.\ncompany: estrai l’azienda attuale solo se chiaramente indicata in rawTitle o rawSnippet; altrimenti restituisci \"\".\nsource: copia esattamente il valore fornito (non modificarlo).\nprofileUrl: copia esattamente il valore fornito (non modificarlo).\nOutput: restituisci SOLO JSON valido con le chiavi nell’ordine: Name, company, source, profileUrl. Nessun testo prima o dopo.\nEsempio di output desiderato:\n{\n\"Name\": \"Mario Rossi\",\n\"company\": \"Acme S.p.A.\",\n\"source\": \"GoogleCSE-LinkedIn\",\n\"profileUrl\": \"https://www.linkedin.com/in/mario-rossi\"\n}\n\nGenera ora l’output JSON per i dati forniti.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -128,
+        128
+      ],
+      "id": "6260d0ed-aa6d-449b-838b-add2fbb65b1a",
+      "name": "AI Agent",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -176,
+        288
+      ],
+      "id": "f627fd0c-1cc8-4326-bb91-8cac9992cfdc",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "qiWLoCTxIbLFYuF6",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "MADIAMO LA RICHIESTA A GOOGLE SEARCH PER CERCARE SU LINKEDIN CON FILTRO Q"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -944,
+        96
+      ],
+      "typeVersion": 1,
+      "id": "c76a27cb-dbc8-4347-9b61-352403a76545",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "PULISCO I DATI DA DARE ALL'AI"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -672,
+        96
+      ],
+      "typeVersion": 1,
+      "id": "7e75e743-a737-4c2f-bd6e-beecff91740c",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Trasforma i risultati di Google CSE nei 4 campi richiesti per Airtable\nconst out = [];\nconst items = $json.items || [];\nfor (const it of items) {\n  const title = it.title || \"\";     // es: \"Nome Cognome - Ruolo | Azienda | LinkedIn\"\n  const link = it.link || \"\";       // es: \"https://www.linkedin.com/in/username/\"\n  const snippet = it.snippet || \"\"; // possiamo usarlo più avanti\n\n  // Filtra URL non persona\n  if (!/linkedin\\.com\\/in\\//i.test(link)) continue;\n\n  // Name: prima parte del title prima di \" - \"\n  let name = title.split(\" - \")[0].trim();\n\n  // Fallback: ricava dal path /in/<slug> se il title non è utile\n  if (!name || name.toLowerCase().includes(\"linkedin\") || name.length < 2) {\n    const m = link.match(/linkedin\\.com\\/in\\/([^\\/?#]+)/i);\n    if (m && m[1]) name = decodeURIComponent(m[1]).replace(/[-_]/g, \" \");\n  }\n\n  // Company: prova a dedurre dal title (parti separate da \"|\")\n  let company = \"\";\n  const pipeParts = title.split(\"|\").map(s => s.trim());\n  if (pipeParts.length >= 2) {\n    const last = pipeParts[pipeParts.length - 1].replace(/LinkedIn/i, \"\").trim();\n    const penultimate = pipeParts[pipeParts.length - 2] || \"\";\n    company = last || penultimate || \"\";\n    if (/linkedin/i.test(company)) company = \"\";\n  }\n\n  out.push({\n    Name: name,\n    source: \"GoogleCSE-LinkedIn\",\n    company,\n    profileUrl: link,\n    // campi grezzi utili se vuoi passarli all'AI dopo\n    rawTitle: title,\n    rawSnippet: snippet,\n  });\n}\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -624,
+        176
+      ],
+      "id": "ab1c841c-0574-41f9-8d5a-e6d54ae5de6f",
+      "name": "Code in JavaScript",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Estrae TUTTI i blocchi ```json ... ``` dall'output del nodo AI,\n// parsea ogni oggetto, normalizza, deduplica per profileUrl\n// e restituisce un item per ciascun profilo pronto per Airtable.\n\n// 1) Prendi il testo dal nodo AI (adatta se usi un connettore diverso)\nconst aiText =\n  $json?.choices?.[0]?.message?.content || // OpenAI Chat (n8n recente)\n  $json?.text || \n  $json?.data || \n  $json?.response || \n  $json?.message || \n  $json?.output || \n  '';\n\n// 2) Estrai tutti i blocchi code-fence ```json ... ```\nconst blocks = [...aiText.matchAll(/```json\\s*([\\s\\S]*?)\\s*```/gi)].map(m => m[1].trim());\n\n// Se per qualunque motivo non ha trovato blocchi fenced, prova a riconoscere JSON \"nudi\"\nif (blocks.length === 0) {\n  const candidates = aiText\n    .split(/\\n{2,}/)\n    .map(s => s.trim())\n    .filter(s => s.startsWith('{') && s.endsWith('}'));\n  blocks.push(...candidates);\n}\n\nconst seen = new Set();\nconst out = [];\n\nfunction sanitizeCompany(val) {\n  const v = (val ?? '').toString().trim();\n  if (!v) return '';\n  const low = v.toLowerCase();\n  if (low === 'empty' || low === 'null' || low === 'undefined') return '';\n  return v;\n}\n\nfor (const b of blocks) {\n  try {\n    const obj = JSON.parse(b);\n\n    // Se l'AI dovesse restituire un array per errore, gestiamolo comunque\n    const arr = Array.isArray(obj) ? obj : [obj];\n    for (const o of arr) {\n      const Name = (o?.Name ?? '').toString().trim();\n      const company = sanitizeCompany(o?.company);\n      const source = (o?.source ?? 'GoogleCSE-LinkedIn').toString().trim();\n      const profileUrl = (o?.profileUrl ?? '').toString().trim();\n\n      if (!profileUrl) continue; // scarta senza URL\n\n      const key = profileUrl.toLowerCase();\n      if (seen.has(key)) continue; // dedup per URL\n      seen.add(key);\n\n      out.push({ json: { Name, company, source, profileUrl } });\n    }\n  } catch (e) {\n    // blocco non parseabile: lo saltiamo\n  }\n}\n\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        176
+      ],
+      "id": "820bcdc5-a18b-4c0d-9e3d-f63042c2ee33",
+      "name": "Code in JavaScript1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -416,
+        176
+      ],
+      "id": "803fc38a-ca3a-46f6-b2bc-2b33f26fa605",
+      "name": "Loop Over Items",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "appedthrZJc6W5QSC",
+          "mode": "list",
+          "cachedResultName": "Leads_People",
+          "cachedResultUrl": "https://airtable.com/appedthrZJc6W5QSC"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG6sPUabNv5N2ei",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appedthrZJc6W5QSC/tblG6sPUabNv5N2ei"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Name }}",
+            "Company": "={{ $json.company }}",
+            "Profile URL": "={{ $json.profileUrl }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Profile URL",
+              "displayName": "Profile URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "updateAllMatches": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        -176,
+        -144
+      ],
+      "id": "c5b3055c-be31-4dc5-82fe-d74da9846173",
+      "name": "Create or update a record",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "0ql8n92jMuGfMP65",
+          "name": "Airtable Personal Access Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "PULISCO I DATI DA DARE AD AIRTABLE"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        176,
+        112
+      ],
+      "typeVersion": 1,
+      "id": "b7a4e718-e0e6-4958-8738-f124b65658fc",
+      "name": "Sticky Note2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sei un analista di lead generation per il dipartamento Talent Acquisition di un'azienda tech.\n\nOBIETTIVO  \nValutare la pertinenza di un profilo LinkedIn rispetto alla chiave di ricerca fornita, assegnando uno score da 0 a 5:\n\n0 = irrilevante (nessuna connessione con la keyword)  \n1 = debolmente correlato  \n2 = vagamente attinente  \n3 = moderatamente in linea  \n4 = molto in linea  \n5 = perfettamente in linea (corrisponde esattamente a ciò che la keyword descrive)\n\nISTRUZIONI OPERATIVE  \n– Confronta la keyword con nome, headline, job title, bio, esperienze, competenze, certificazioni e settore del profilo.  \n– Pesa soprattutto job title, competenze tecniche e contesto aziendale; considera secondariamente istruzione e attività recenti.  \n– Non penalizzare sinonimi o traduzioni (es. \"software engineer\" ≈ \"sviluppatore software\").  \n– Se il profilo contiene poche informazioni e non è possibile giudicare, assegna 1.  \n– Produci **solo JSON** senza testo extra; struttura esattamente così:\n\n{\n  \"name\": \"<nome completo del profilo>\",\n  \"relevance_score\": <intero 0-5>,\n  \"reason\": \"<max 40 parole che giustificano lo score, iniziando con il nome del profilo>\"\n}\n\nDATI\nkeyword: \"{{ $json.keyword }}\"\nprofilo: \"{{ $json.profil }}\"\nname: \"{{ $json.name }}\"",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        944,
+        528
+      ],
+      "id": "c81653d4-ef5b-41c7-a6c8-3bbf279a777e",
+      "name": "AI Agent1",
+      "retryOnFail": true,
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        864,
+        672
+      ],
+      "id": "7c76adeb-8836-4daf-a39b-ead6b5731d0c",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "qiWLoCTxIbLFYuF6",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "url": "https://www.googleapis.com/customsearch/v1",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpQueryAuth",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "cx",
+              "value": "269909e71928f4739"
+            },
+            {
+              "name": "q",
+              "value": "={{ 'site:' + $json.site + ' inurl:' + $json.path + ' -inurl:/company/ -inurl:/jobs/ ' + $json.keyword }}"
+            }
+          ]
+        },
+        "options": {
+          "pagination": {
+            "pagination": {
+              "parameters": {
+                "parameters": [
+                  {
+                    "name": "start",
+                    "value": "={{$response.body.queries.nextPage[0].startIndex }}"
+                  }
+                ]
+              },
+              "limitPagesFetched": true,
+              "maxRequests": 3
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        720
+      ],
+      "id": "c37bfd3a-1ac3-42e6-b413-de35779da394",
+      "name": "HTTP Request1",
+      "credentials": {
+        "httpQueryAuth": {
+          "id": "Wtydf1hPm8K9Ovup",
+          "name": "Query Auth account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9f85143d-b1b2-4ba3-a6ce-9661775bd568",
+              "name": "keyword",
+              "value": "automation engineer italy",
+              "type": "string"
+            },
+            {
+              "id": "80f7a8e7-f31d-48a8-9601-aabbd81dbeb6",
+              "name": "site",
+              "value": "linkedin.com",
+              "type": "string"
+            },
+            {
+              "id": "3288a94b-e7d1-4f94-96cd-e2f40899ba38",
+              "name": "path",
+              "value": "/in/",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1200,
+        720
+      ],
+      "id": "594c434a-a362-4734-9787-f1cf1f84d1bb",
+      "name": "Edit Fields1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1408,
+        720
+      ],
+      "id": "3ddf1014-0f1c-4e50-b55a-8835d67f0a13",
+      "name": "Schedule Trigger1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sei un data formatter professionale. Ricevi dati grezzi provenienti da risultati Google di profili LinkedIn. Il tuo compito è restituire SOLO JSON valido e minimamente necessario per l’ingestione in Airtable, con queste chiavi esatte e in questo ordine: Name, company, source, profileUrl. Non aggiungere testo fuori dal JSON, commenti o campi extra. Se un valore non è chiaramente deducibile, usa una stringa vuota \"\" (mai null). Non inventare informazioni. Capitalizza correttamente i nomi propri. Mantieni invariato l’URL.\n\nUser prompt (usa come Expression nel campo del messaggio utente):\nEcco i dati grezzi del profilo:\n\nrawTitle: {{$json.rawTitle}}\nrawSnippet: {{$json.rawSnippet}}\nprofileUrl: {{$json.profileUrl}}\nsource: {{$json.source}}\nIstruzioni di formattazione:\n\nName: estrai il nome completo dal rawTitle (o dall’URL /in/ come fallback), con capitalizzazione corretta. Evita di includere ruoli/qualifiche nel nome.\ncompany: estrai l’azienda attuale solo se chiaramente indicata in rawTitle o rawSnippet; altrimenti restituisci \"\".\nsource: copia esattamente il valore fornito (non modificarlo).\nprofileUrl: copia esattamente il valore fornito (non modificarlo).\nOutput: restituisci SOLO JSON valido con le chiavi nell’ordine: Name, company, source, profileUrl. Nessun testo prima o dopo.\nEsempio di output desiderato:\n{\n\"Name\": \"Mario Rossi\",\n\"company\": \"Acme S.p.A.\",\n\"source\": \"GoogleCSE-LinkedIn\",\n\"profileUrl\": \"https://www.linkedin.com/in/mario-rossi\"\n}\n\nGenera ora l’output JSON per i dati forniti.",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2.2,
+      "position": [
+        -192,
+        608
+      ],
+      "id": "3b41550f-bd4e-40e0-a64b-802139352475",
+      "name": "AI Agent2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -240,
+        768
+      ],
+      "id": "f97c4b53-8f9b-479a-a7c1-db96552c34d0",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "qiWLoCTxIbLFYuF6",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "MADIAMO LA RICHIESTA A GOOGLE SEARCH PER CERCARE SU LINKEDIN CON FILTRO Q"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1040,
+        640
+      ],
+      "typeVersion": 1,
+      "id": "4aa24681-161a-464c-8054-cb77fe918f0a",
+      "name": "Sticky Note3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "PULISCO I DATI DA DARE ALL'AI"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -768,
+        640
+      ],
+      "typeVersion": 1,
+      "id": "8cd86d75-51ef-4e9f-b30c-4cdd066ef77a",
+      "name": "Sticky Note4",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Trasforma i risultati di Google CSE nei 4 campi richiesti per Airtable\nconst out = [];\nconst items = $json.items || [];\nfor (const it of items) {\n  const title = it.title || \"\";     // es: \"Nome Cognome - Ruolo | Azienda | LinkedIn\"\n  const link = it.link || \"\";       // es: \"https://www.linkedin.com/in/username/\"\n  const snippet = it.snippet || \"\"; // possiamo usarlo più avanti\n\n  // Filtra URL non persona\n  if (!/linkedin\\.com\\/in\\//i.test(link)) continue;\n\n  // Name: prima parte del title prima di \" - \"\n  let name = title.split(\" - \")[0].trim();\n\n  // Fallback: ricava dal path /in/<slug> se il title non è utile\n  if (!name || name.toLowerCase().includes(\"linkedin\") || name.length < 2) {\n    const m = link.match(/linkedin\\.com\\/in\\/([^\\/?#]+)/i);\n    if (m && m[1]) name = decodeURIComponent(m[1]).replace(/[-_]/g, \" \");\n  }\n\n  // Company: prova a dedurre dal title (parti separate da \"|\")\n  let company = \"\";\n  const pipeParts = title.split(\"|\").map(s => s.trim());\n  if (pipeParts.length >= 2) {\n    const last = pipeParts[pipeParts.length - 1].replace(/LinkedIn/i, \"\").trim();\n    const penultimate = pipeParts[pipeParts.length - 2] || \"\";\n    company = last || penultimate || \"\";\n    if (/linkedin/i.test(company)) company = \"\";\n  }\n\n  out.push({\n    Name: name,\n    source: \"GoogleCSE-LinkedIn\",\n    company,\n    profileUrl: link,\n    // campi grezzi utili se vuoi passarli all'AI dopo\n    rawTitle: title,\n    rawSnippet: snippet,\n  });\n}\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -720,
+        720
+      ],
+      "id": "6e86db29-168f-439b-a82a-b229d955452d",
+      "name": "Code in JavaScript2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Estrae TUTTI i blocchi ```json ... ``` dall'output del nodo AI,\n// parsea ogni oggetto, normalizza, deduplica per profileUrl\n// e restituisce un item per ciascun profilo pronto per Airtable.\n\n// 1) Prendi il testo dal nodo AI (adatta se usi un connettore diverso)\nconst aiText =\n  $json?.choices?.[0]?.message?.content || // OpenAI Chat (n8n recente)\n  $json?.text || \n  $json?.data || \n  $json?.response || \n  $json?.message || \n  $json?.output || \n  '';\n\n// 2) Estrai tutti i blocchi code-fence ```json ... ```\nconst blocks = [...aiText.matchAll(/```json\\s*([\\s\\S]*?)\\s*```/gi)].map(m => m[1].trim());\n\n// Se per qualunque motivo non ha trovato blocchi fenced, prova a riconoscere JSON \"nudi\"\nif (blocks.length === 0) {\n  const candidates = aiText\n    .split(/\\n{2,}/)\n    .map(s => s.trim())\n    .filter(s => s.startsWith('{') && s.endsWith('}'));\n  blocks.push(...candidates);\n}\n\nconst seen = new Set();\nconst out = [];\n\nfunction sanitizeCompany(val) {\n  const v = (val ?? '').toString().trim();\n  if (!v) return '';\n  const low = v.toLowerCase();\n  if (low === 'empty' || low === 'null' || low === 'undefined') return '';\n  return v;\n}\n\nfor (const b of blocks) {\n  try {\n    const obj = JSON.parse(b);\n\n    // Se l'AI dovesse restituire un array per errore, gestiamolo comunque\n    const arr = Array.isArray(obj) ? obj : [obj];\n    for (const o of arr) {\n      const Name = (o?.Name ?? '').toString().trim();\n      const company = sanitizeCompany(o?.company);\n      const source = (o?.source ?? 'GoogleCSE-LinkedIn').toString().trim();\n      const profileUrl = (o?.profileUrl ?? '').toString().trim();\n\n      if (!profileUrl) continue; // scarta senza URL\n\n      const key = profileUrl.toLowerCase();\n      if (seen.has(key)) continue; // dedup per URL\n      seen.add(key);\n\n      out.push({ json: { Name, company, source, profileUrl } });\n    }\n  } catch (e) {\n    // blocco non parseabile: lo saltiamo\n  }\n}\n\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        160,
+        608
+      ],
+      "id": "b4b998c5-a484-44b3-a46d-df88bc95582a",
+      "name": "Code in JavaScript3",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        -512,
+        720
+      ],
+      "id": "0242154d-feeb-4e75-8e43-ddd9cfb5188c",
+      "name": "Loop Over Items1",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "appedthrZJc6W5QSC",
+          "mode": "list",
+          "cachedResultName": "Leads_People",
+          "cachedResultUrl": "https://airtable.com/appedthrZJc6W5QSC"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG6sPUabNv5N2ei",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appedthrZJc6W5QSC/tblG6sPUabNv5N2ei"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.Name }}",
+            "Company": "={{ $json.company }}",
+            "Profile URL": "={{ $json.profileUrl }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Profile URL",
+              "displayName": "Profile URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {
+          "updateAllMatches": true
+        }
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        512,
+        624
+      ],
+      "id": "d1f61e15-4dc5-43a8-bb58-cce65b85170e",
+      "name": "Create or update a record1",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "0ql8n92jMuGfMP65",
+          "name": "Airtable Personal Access Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "PULISCO I DATI DA DARE AD AIRTABLE"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        96,
+        560
+      ],
+      "typeVersion": 1,
+      "id": "b70e0a59-a2fc-49b3-821e-f96b28f4ef7c",
+      "name": "Sticky Note5",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {
+          "includeUnpaired": true
+        }
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        432,
+        432
+      ],
+      "id": "a738ca49-07b3-4867-be0d-db7ac99e29cf",
+      "name": "Merge",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a1819c7a-ea5b-492c-a4a9-abec7616095f",
+              "name": "keyword",
+              "value": "={{ $json.keyword || $items()[0].json.keyword || $item(0).$node[\"Edit Fields1\"].json.keyword }}",
+              "type": "string"
+            },
+            {
+              "id": "e26c1f76-3ad9-4f61-8544-545dedaae7f3",
+              "name": "profil",
+              "value": "={{ $json.profileUrl }}",
+              "type": "string"
+            },
+            {
+              "id": "6b62e3d7-fbd9-47f2-8e07-03e5d45d72f3",
+              "name": "name",
+              "value": "={{ $json.Name }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        704,
+        432
+      ],
+      "id": "7197d263-6da4-4398-b726-f953da7bbd65",
+      "name": "Edit Fields2",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Pulisce l'output dell'AI Agent #2 e estrae name, relevance_score e reason\nreturn items.map(item => {\n  let raw = item.json.output || item.json.text || '';\n  \n  // Rimuovi markdown code fence (```json\\n ... \\n```)\n  raw = raw.replace(/^```json\\s*/i, '').replace(/\\s*```$/i, '').trim();\n  \n  let parsed;\n  try {\n    parsed = JSON.parse(raw);\n  } catch (e) {\n    // Fallback: se il parsing fallisce\n    parsed = { name: '', relevance_score: 0, reason: 'Parsing error' };\n  }\n  \n  // Estrai i campi e normalizza\n  item.json.name = (parsed.name || '').trim();\n  item.json.relevance_score = parseInt(parsed.relevance_score, 10) || 0;\n  item.json.reason = (parsed.reason || '').trim();\n  \n  // Rimuovi i campi grezzi per pulizia\n  delete item.json.output;\n  delete item.json.text;\n  \n  return item;\n});"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1296,
+        688
+      ],
+      "id": "08f438b7-d560-417e-add8-86efbf8275c2",
+      "name": "Code in JavaScript4",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "content": "PULISO I DATI DELL AI1 DA DARE AD AIRTABLE"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        1248,
+        656
+      ],
+      "typeVersion": 1,
+      "id": "265819ee-dc5b-4510-b7ab-f277e534f5e0",
+      "name": "Sticky Note6",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "appedthrZJc6W5QSC",
+          "mode": "list",
+          "cachedResultName": "Leads_People",
+          "cachedResultUrl": "https://airtable.com/appedthrZJc6W5QSC"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG6sPUabNv5N2ei",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appedthrZJc6W5QSC/tblG6sPUabNv5N2ei"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "={{ $json.relevance_score }}",
+            "Name": "={{ $json.name }}",
+            "Description Status": "={{ $json.reason }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Profile URL",
+              "displayName": "Profile URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Description Status",
+              "displayName": "Description Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        1680,
+        688
+      ],
+      "id": "d4a4cb34-674c-4fc3-adba-2d6881a6ceb2",
+      "name": "Create or update a record2",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "0ql8n92jMuGfMP65",
+          "name": "Airtable Personal Access Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9f85143d-b1b2-4ba3-a6ce-9661775bd568",
+              "name": "keyword",
+              "value": "automation engineer italy",
+              "type": "string"
+            },
+            {
+              "id": "80f7a8e7-f31d-48a8-9601-aabbd81dbeb6",
+              "name": "phantomID",
+              "value": "7201516366350157",
+              "type": "string"
+            },
+            {
+              "id": "9b9d1e12-fc97-44ef-b25c-acc0c775dd96",
+              "name": "number_of_profiles",
+              "value": 3,
+              "type": "number"
+            },
+            {
+              "id": "88f64828-6e9d-47b8-90f2-4922982ded82",
+              "name": "li_at",
+              "value": "AQEFARABAAAAABiJ908AAAGZmrjT7wAAAZoBT7kKTgAAs3VybjpsaTplbnRlcnByaXNlQXV0aFRva2VuOmVKeGpaQUFDZG9QcW55Q2FrK2xHTm9qbStKYmd5QWhpaUh6WFdBMW04RDVxY1daZ0FRQ3Fxd2cwXnVybjpsaTplbnRlcnByaXNlUHJvZmlsZToodXJuOmxpOmVudGVycHJpc2VBY2NvdW50OjEyMDYxNzk3NywxNTExODE0MTkpXnVybjpsaTptZW1iZXI6ODM2MzU1MTkzFtLEnGi4tQICwnPV2kbNnIOCKRKUDoWtlgoZ2qyDQToP5I4qiLe8XUDthub46gAD8Vg2d3c35nkqlnMfvgrqhUHw7VOiHBJixtR77jfnWe8O2kMNue7rwh7K_TkuJ4nWS2HeRCcJrGUJyxYBYQdVKgEHjVKH69wBwAU64Otiiq_MlYc4l3vwsfsfg8ydh67qAQZGgw",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1184,
+        1296
+      ],
+      "id": "3e0a1d75-a607-47f5-aa7a-c83c6af2f381",
+      "name": "Edit Fields3"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 7
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1392,
+        1296
+      ],
+      "id": "a288c632-d330-49c6-8d0b-c04c16e06398",
+      "name": "Schedule Trigger2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c82a6278-e48f-4c32-b07b-d3bed5b28372",
+              "name": "search_url",
+              "value": "=https://www.linkedin.com/search/results/people/?keywords={{ encodeURIComponent($json.keyword) }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -992,
+        1120
+      ],
+      "id": "9525303c-84b1-463d-8016-a30e536d1c90",
+      "name": "Edit Fields4"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        -784,
+        1280
+      ],
+      "id": "181806d7-691e-4803-b6bf-d9c5f80ea980",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "agentId": "5750551300195552",
+        "resolveData": false,
+        "jsonParameters": true,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.phantombuster",
+      "typeVersion": 1,
+      "position": [
+        -576,
+        1280
+      ],
+      "id": "12666406-0924-4237-a01b-46096432ecae",
+      "name": "Add an agent to the launch queue",
+      "credentials": {
+        "phantombusterApi": {
+          "id": "pTBwV8v5Pz5GMl5z",
+          "name": "Phantombuster account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getOutput",
+        "agentId": "5750551300195552",
+        "resolveData": false,
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.phantombuster",
+      "typeVersion": 1,
+      "position": [
+        -368,
+        1280
+      ],
+      "id": "4fe55543-07a7-4939-9f6f-a951f38e8176",
+      "name": "Get the output of an agent",
+      "credentials": {
+        "phantombusterApi": {
+          "id": "pTBwV8v5Pz5GMl5z",
+          "name": "Phantombuster account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Il log può arrivare come stringa in items[0].json.output oppure direttamente in items[0].json\nconst raw = items[0].json;\nconst log = typeof raw === 'string' ? raw : (raw.output || JSON.stringify(raw));\n\n// Estrai URL result.json o result.csv\nconst matches = [...log.matchAll(/https:\\/\\/phantombuster\\.s3\\.amazonaws\\.com\\/\\S+\\/result\\.(json|csv)/g)];\nconst urls = matches.map(m => m[0]);\n\nif (!urls.length) {\n  return [{ json: { error: 'Nessun URL trovato nel log', logSample: log.slice(0, 800) } }];\n}\n\n// Preferisci JSON (più semplice da parsare)\nconst jsonUrl = urls.find(u => u.endsWith('result.json'));\nconst url = jsonUrl || urls[0];\nconst fileType = url.endsWith('.json') ? 'json' : 'csv';\n\nreturn [{ json: { url, fileType } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        16,
+        1280
+      ],
+      "id": "cde3a13b-3004-4391-887b-42e9a2844c6f",
+      "name": "estrai url"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Function robusto: accetta array, oggetto, wrapper o stringa JSON e produce N items normalizzati\n\nconst input = items[0]?.json;\n\n// 1) Estrattore universale: restituisce SEMPRE un array di profili (anche se c'è un singolo oggetto)\nfunction toArray(payload) {\n  if (!payload) return [];\n  // Già array\n  if (Array.isArray(payload)) return payload;\n\n  // Stringa → prova JSON.parse\n  if (typeof payload === 'string') {\n    try {\n      const parsed = JSON.parse(payload);\n      return toArray(parsed);\n    } catch {\n      return [];\n    }\n  }\n\n  // Oggetto → cerca array in chiavi comuni\n  if (typeof payload === 'object') {\n    // Caso: l'oggetto stesso è un profilo (ha chiavi tipiche)\n    const hint = ['profileUrl','fullName','firstName','lastName','headline'];\n    if (hint.some(k => k in payload)) return [payload];\n\n    const candidates = ['data','results','output','items','profiles','result','resultObject','value','list'];\n    for (const key of candidates) {\n      const v = payload[key];\n      if (Array.isArray(v)) return v;\n      if (v && typeof v === 'object') {\n        // Se è oggetto che a sua volta contiene array in chiavi note\n        const inner = toArray(v);\n        if (inner.length) return inner;\n      }\n      if (typeof v === 'string') {\n        try {\n          const parsed = JSON.parse(v);\n          const inner = toArray(parsed);\n          if (inner.length) return inner;\n        } catch {}\n      }\n    }\n  }\n\n  return [];\n}\n\n// 2) Utility di pulizia\nfunction clean(v) {\n  if (v === null || v === undefined) return '';\n  if (typeof v === 'string') {\n    const s = v.trim();\n    if (['empty','undefined','null','n/a','NaN'].includes(s.toLowerCase())) return '';\n    return s;\n  }\n  return String(v).trim();\n}\nfunction urlOrEmpty(s) {\n  const v = clean(s);\n  return v && v.startsWith('http') ? v : '';\n}\nfunction validDegree(s) {\n  const v = clean(s);\n  return ['1st','2nd','3rd'].includes(v) ? v : '';\n}\nfunction normalizeTimestamp(ts) {\n  const v = clean(ts);\n  if (!v) return new Date().toISOString();\n  if (/^\\d{4}-\\d{2}-\\d{2}T/.test(v)) return v;\n  const d = new Date(v);\n  return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();\n}\nfunction buildFullName(p) {\n  const full = clean(p.fullName);\n  if (full) return full;\n  const first = clean(p.firstName);\n  const last = clean(p.lastName);\n  return [first, last].filter(Boolean).join(' ');\n}\nfunction extractDomain(url) {\n  const v = urlOrEmpty(url);\n  if (!v) return '';\n  try {\n    const u = new URL(v);\n    return u.hostname.replace(/^www\\./,'');\n  } catch {\n    return '';\n  }\n}\n\n// 3) Ottieni array di profili\nconst profiles = toArray(input);\n\nif (!profiles.length) {\n  // Debug utile per capire struttura ricevuta\n  return [{\n    json: {\n      error: \"Nessun profilo trovato nell'input. Verifica la struttura dati.\",\n      rawType: typeof input,\n      keys: input && typeof input === 'object' ? Object.keys(input) : null,\n      sample: typeof input === 'string' ? input.slice(0, 400) : input\n    }\n  }];\n}\n\n// 4) Normalizza → items per Airtable\nconst out = profiles.map((p, idx) => {\n  if (!p || typeof p !== 'object') return null;\n\n  return {\n    json: {\n      profileUrl: urlOrEmpty(p.profileUrl),\n      vmid: clean(p.vmid),\n\n      fullName: buildFullName(p),\n      firstName: clean(p.firstName),\n      lastName: clean(p.lastName),\n      headline: clean(p.headline),\n      location: clean(p.location),\n\n      profileImageUrl: urlOrEmpty(p.profileImageUrl),\n      connectionDegree: validDegree(p.connectionDegree),\n\n      company: clean(p.company),\n      companyUrl: urlOrEmpty(p.companyUrl),\n      companySlug: clean(p.companySlug),\n      companyId: clean(p.companyId),\n      companyDomain: extractDomain(p.companyUrl),\n\n      jobTitle: clean(p.jobTitle),\n      jobDateRange: clean(p.jobDateRange),\n      industry: clean(p.industry),\n\n      company2: clean(p.company2),\n      companyUrl2: urlOrEmpty(p.companyUrl2),\n      jobTitle2: clean(p.jobTitle2),\n      jobDateRange2: clean(p.jobDateRange2),\n\n      school: clean(p.school),\n      schoolDegree: clean(p.schoolDegree),\n      schoolDateRange: clean(p.schoolDateRange),\n      school2: clean(p.school2),\n      schoolDegree2: clean(p.schoolDegree2),\n      schoolDateRange2: clean(p.schoolDateRange2),\n\n      query: clean(p.query),\n      category: clean(p.category || 'People'),\n      timestamp: normalizeTimestamp(p.timestamp),\n\n      searchAccountFullName: clean(p.searchAccountFullName),\n      searchAccountProfileId: clean(p.searchAccountProfileId),\n\n      rowIndex: Number.isFinite(p.rowIndex) ? p.rowIndex : (parseInt(clean(p.rowIndex)) || idx + 1),\n      importedAt: new Date().toISOString()\n    }\n  };\n}).filter(Boolean);\n\nreturn out;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        640,
+        1280
+      ],
+      "id": "3af9063d-3dc8-4ea8-a114-45b9d0eefa7e",
+      "name": "normalizzo"
+    },
+    {
+      "parameters": {
+        "content": "LIMITO A 10 OUTPUT E NORMALIZZO"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        368,
+        1200
+      ],
+      "typeVersion": 1,
+      "id": "49d4ca96-931a-45c8-8496-8e88ec4ddfac",
+      "name": "Sticky Note7"
+    },
+    {
+      "parameters": {
+        "url": "https://api.phantombuster.com/api/v2/containers/fetch-output",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "phantombusterApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "id",
+              "value": "1342544072588221"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -160,
+        1280
+      ],
+      "id": "b7d5d2d2-dd15-4de1-b57f-42bd6886dd11",
+      "name": "output ricerca",
+      "credentials": {
+        "phantombusterApi": {
+          "id": "pTBwV8v5Pz5GMl5z",
+          "name": "Phantombuster account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "=https://api.phantombuster.com/api/v2/containers/fetch-result-object?id={{ $json.containerId }}&mode=json",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "phantombusterApi",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        432,
+        1280
+      ],
+      "id": "4c1d453c-11a3-41fd-9bae-506e49566233",
+      "name": "scarica leads",
+      "credentials": {
+        "phantombusterApi": {
+          "id": "pTBwV8v5Pz5GMl5z",
+          "name": "Phantombuster account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "appedthrZJc6W5QSC",
+          "mode": "list",
+          "cachedResultName": "Leads_People",
+          "cachedResultUrl": "https://airtable.com/appedthrZJc6W5QSC"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblG6sPUabNv5N2ei",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appedthrZJc6W5QSC/tblG6sPUabNv5N2ei"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Name": "={{ $json.fullName }}",
+            "Company": "={{ $json.company }}",
+            "Profile URL": "={{ $json.profileUrl }}"
+          },
+          "matchingColumns": [
+            "Name"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": true
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Company",
+              "displayName": "Company",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Profile URL",
+              "displayName": "Profile URL",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "Description Status",
+              "displayName": "Description Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        848,
+        1280
+      ],
+      "id": "249010b4-c077-4554-8183-4c3cdb16db00",
+      "name": "Create or update a record4",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "0ql8n92jMuGfMP65",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        224,
+        1280
+      ],
+      "id": "dbc4bd0e-ee32-4b8b-be4c-1c63338ba52f",
+      "name": "Merge2"
+    },
+    {
+      "parameters": {
+        "content": "MILE"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1584,
+        160
+      ],
+      "typeVersion": 1,
+      "id": "67b2b3bb-a31f-4f25-bb30-81240d772d6c",
+      "name": "Sticky Note8"
+    },
+    {
+      "parameters": {
+        "content": "EXTRA MILE"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1680,
+        688
+      ],
+      "typeVersion": 1,
+      "id": "693a0a4c-875b-4762-af98-e28e7dc6ec08",
+      "name": "Sticky Note9"
+    },
+    {
+      "parameters": {
+        "content": "2EXTRAMILE"
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1664,
+        1264
+      ],
+      "typeVersion": 1,
+      "id": "06bb0f0b-b302-4236-8c4a-0452ef2f8f51",
+      "name": "Sticky Note10"
+    }
+  ],
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "json": {
+          "timestamp": "2025-10-15T16:26:22.323+02:00",
+          "Readable date": "October 15th 2025, 4:26:22 pm",
+          "Readable time": "4:26:22 pm",
+          "Day of week": "Wednesday",
+          "Year": "2025",
+          "Month": "October",
+          "Day of month": "15",
+          "Hour": "16",
+          "Minute": "26",
+          "Second": "22",
+          "Timezone": "Europe/Rome (UTC+02:00)"
+        }
+      }
+    ],
+    "Schedule Trigger1": [
+      {
+        "json": {
+          "timestamp": "2025-10-15T16:26:22.323+02:00",
+          "Readable date": "October 15th 2025, 4:26:22 pm",
+          "Readable time": "4:26:22 pm",
+          "Day of week": "Wednesday",
+          "Year": "2025",
+          "Month": "October",
+          "Day of month": "15",
+          "Hour": "16",
+          "Minute": "26",
+          "Second": "22",
+          "Timezone": "Europe/Rome (UTC+02:00)"
+        }
+      }
+    ],
+    "Schedule Trigger2": [
+      {
+        "json": {
+          "timestamp": "2025-10-15T16:26:22.323+02:00",
+          "Readable date": "October 15th 2025, 4:26:22 pm",
+          "Readable time": "4:26:22 pm",
+          "Day of week": "Wednesday",
+          "Year": "2025",
+          "Month": "October",
+          "Day of month": "15",
+          "Hour": "16",
+          "Minute": "26",
+          "Second": "22",
+          "Timezone": "Europe/Rome (UTC+02:00)"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "Create or update a record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create or update a record": {
+      "main": [
+        []
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Create or update a record1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items1": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript4": {
+      "main": [
+        [
+          {
+            "node": "Create or update a record2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create or update a record2": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields3": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields4",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger2": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields4": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Add an agent to the launch queue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Add an agent to the launch queue": {
+      "main": [
+        [
+          {
+            "node": "Get the output of an agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get the output of an agent": {
+      "main": [
+        [
+          {
+            "node": "output ricerca",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "estrai url": {
+      "main": [
+        [
+          {
+            "node": "Merge2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "normalizzo": {
+      "main": [
+        [
+          {
+            "node": "Create or update a record4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "output ricerca": {
+      "main": [
+        [
+          {
+            "node": "estrai url",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "scarica leads": {
+      "main": [
+        [
+          {
+            "node": "normalizzo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge2": {
+      "main": [
+        [
+          {
+            "node": "scarica leads",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "80986903-1f52-49d8-a501-4592bbdbb2ba",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "546c0968f3d4c617eccea94379f3601f5f9a4645c71007f8c629d01e41e473c8"
+  },
+  "id": "hpRGe7C20UpoWwMm",
+  "tags": []
+}
