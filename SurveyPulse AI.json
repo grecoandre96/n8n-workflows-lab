@@ -1,0 +1,856 @@
+{
+  "name": "W4 Andrea Greco",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1277142b-47dd-45b6-b93c-b34d963b1fcd",
+              "name": "name",
+              "value": "={{ $json.body.data.data.ocj87ds4kj4rpn3o7n732x5g.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "97b82c83-2bb1-4f9e-8173-f16417ea305c",
+              "name": "cognome",
+              "value": "={{ $json.body.data.data.ofbc5bjhwnhzkjykhlmz9r4s.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "bd80c224-1a26-427c-9eea-106b723f7cec",
+              "name": "email",
+              "value": "={{ $json.body.data.data.tbu3itdjy4ycdzkogr21h0t7.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "8d9b6ccd-af2f-4757-aa4d-8deb62df4044",
+              "name": "nazione",
+              "value": "={{ $json.body.data.data.x81yxnqursm284jmfwlld2yb.trim() }}",
+              "type": "string"
+            },
+            {
+              "id": "145d014b-2bd0-4c80-be39-24382fab5023",
+              "name": "budget",
+              "value": "={{ $json.body.data.data.cm3gwjkf8v0pvgd61huqp1mb }}",
+              "type": "string"
+            },
+            {
+              "id": "45085460-2077-4118-9e82-f1b11f7824b5",
+              "name": "motivo interesse",
+              "value": "={{ $json.body.data.data.deykfq6gjtpxuonv2uoay6hk }}",
+              "type": "string"
+            },
+            {
+              "id": "7d78cf2c-6021-46f7-b917-36d43f30f5f5",
+              "name": "submissionId",
+              "value": "={{ $json.body.data.id }}",
+              "type": "string"
+            },
+            {
+              "id": "804ef892-2f0c-4207-891a-6fec061551e1",
+              "name": "surveyId",
+              "value": "={{ $json.body.data.surveyId }}",
+              "type": "string"
+            },
+            {
+              "id": "a3cfe96f-bcb2-4c71-91a9-6cfad4bb3e22",
+              "name": "createdAt",
+              "value": "={{ $json.body.data.createdAt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        288,
+        0
+      ],
+      "id": "d894ece8-0a54-4f26-8298-bdb02ba60e9d",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "inputText": "=Motivo di interesse: {{ $json['motivo interesse'] }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.sentimentAnalysis",
+      "typeVersion": 1.1,
+      "position": [
+        512,
+        -16
+      ],
+      "id": "12937fd9-fe46-4b57-932c-094dc88856cb",
+      "name": "Sentiment Analysis"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        608,
+        176
+      ],
+      "id": "09dcdf9e-b64c-46c2-8d5c-3ccbb90d5b24",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "w1znxGmmxUzRvX2t",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1277142b-47dd-45b6-b93c-b34d963b1fcd",
+              "name": "name",
+              "value": "=KA",
+              "type": "string"
+            },
+            {
+              "id": "97b82c83-2bb1-4f9e-8173-f16417ea305c",
+              "name": "cognome",
+              "value": "=JAKA",
+              "type": "string"
+            },
+            {
+              "id": "bd80c224-1a26-427c-9eea-106b723f7cec",
+              "name": "email",
+              "value": "=IAJAO@SJSOA.AKS",
+              "type": "string"
+            },
+            {
+              "id": "8d9b6ccd-af2f-4757-aa4d-8deb62df4044",
+              "name": "nazione",
+              "value": "=JSIAO",
+              "type": "string"
+            },
+            {
+              "id": "145d014b-2bd0-4c80-be39-24382fab5023",
+              "name": "budget",
+              "value": "=2000",
+              "type": "string"
+            },
+            {
+              "id": "45085460-2077-4118-9e82-f1b11f7824b5",
+              "name": "motivo interesse",
+              "value": "=IL VOSTRO SERVIZIO è PESSIMO",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        208
+      ],
+      "id": "7cf86073-f0f1-42dc-ab07-0d439c0789bd",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        80,
+        208
+      ],
+      "id": "33802e6a-83e5-4ccd-86f2-2c45f55e7409",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1168,
+        240
+      ],
+      "id": "7ea97d23-ae00-470e-9d22-be02c764bae2",
+      "name": "No Operation, do nothing"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1584,
+        -48
+      ],
+      "id": "a83703e3-666c-4148-a5b6-f205d1df5e2d",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        784,
+        -384
+      ],
+      "id": "b67a42f1-478d-4edb-8deb-a78ea2b19e08",
+      "name": "Google Gemini Chat Model1",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "w1znxGmmxUzRvX2t",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"subject\": \"Proposta operativa per iniziare\",\n  \"body\": \"Ciao Mario,\\n\\ngrazie per il tuo messaggio. Ho capito che sei interessato perché \\\"il servizio sembra fare al caso mio\\\". Possiamo avviare subito un setup mirato e definire una prima milestone entro pochi giorni per validare rapidamente i risultati.\\n\\nApprovi per iniziare? Rispondi \\\"Approvo\\\" a questa mail oppure indicami quando preferisci partire.\\n\\nA presto,\\nIl tuo Account Manager\\nn8n Automation\"\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        880,
+        -384
+      ],
+      "id": "85c85d7f-bd98-4921-90f4-cdfeb52a6dcd",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1104,
+        -144
+      ],
+      "id": "2a8a76cc-d34d-4836-92ad-5f4ae8aac158",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "content": "RICEVO  I DATI DEL SURVEY DI FORMBRIKS",
+        "height": 288,
+        "width": 416
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        48,
+        -96
+      ],
+      "typeVersion": 1,
+      "id": "6f34c8cf-8075-45d5-8eef-e78549fe9c42",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Istruzioni:\n\nRuolo: sei un account manager che risponde a un lead interessato.\nObiettivo: scrivere una mail breve, professionale, orientata all’azione.\nTono: cordiale, diretto, senza frasi vuote; 80–120 parole.\nPersonalizzazione: usa il motivo dichiarato dal lead per contestualizzare la proposta.\nStruttura testo:\nRingraziamento iniziale.\nRiformula in 1 frase il motivo di interesse per mostrare comprensione.\n1–2 frasi su come aiutiamo concretamente (beneficio principale, tempi rapidi).\nChiusura con CTA esplicita: “Approvi per iniziare?” e opzioni di risposta.\nFirma generica (placeholder).\nVincoli output:\nLingua: italiano\nMassimo 2 paragrafi + una riga finale con CTA\nNiente preamboli extra\nRestituisci SOLO un JSON che rispetta esattamente lo schema sottostante\nSchema output (Define below):\n{\n\"type\": \"object\",\n\"properties\": {\n\"subject\": { \"type\": \"string\", \"description\": \"Oggetto dell'email\" },\n\"body\": { \"type\": \"string\", \"description\": \"Corpo dell'email, senza includere 'Oggetto:'\" }\n},\n\"required\": [\"subject\", \"body\"],\n\"additionalProperties\": false\n}\n\nVariabili disponibili:\n\nnome = {{ $json.name }}\ncognome = {{ $json.cognome }}\nmotivo_interesse = {{ $json['motivo interesse'] }}\nEsempio stile atteso (solo come riferimento, non copiarlo alla lettera):\n{\n\"subject\": \"Proposta operativa per iniziare\",\n\"body\": \"Ciao {{ json.name }},\\n\\ngrazie per il tuo messaggio. Ho capito che sei interessato perché “{{ json['motivo interesse'] }}”. Possiamo avviare subito un setup mirato e definire una prima milestone entro pochi giorni per validare rapidamente i risultati.\\n\\nApprovi per iniziare? Rispondi “Approvo” a questa mail oppure indicami quando preferisci partire.\\n\\nA presto,\\n[Il tuo Nome]\\n[Ruolo/Company]\"\n}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        768,
+        -208
+      ],
+      "id": "a2859fb0-d4f5-43bb-8eec-26edc8fd0450",
+      "name": "MailGeneretor"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=Ciao {{ $json.name }}",
+        "message": "Grazie per aver compilato il nostro modulo di contatto. Abbiamo esaminato la tua richiesta e, al momento, non sembra esserci una corrispondenza diretta con i nostri servizi principali.  Tuttavia, siamo qui per aiutarti! Se desideri discutere le tue esigenze più in dettaglio o hai domande specifiche, il nostro team di supporto è a tua completa disposizione.  Puoi contattarci direttamente al numero [Numero di Telefono del Supporto] o visitare la nostra pagina di supporto [Link alla Pagina di Supporto].  Speriamo di poterti assistere in futuro.  Cordiali saluti,",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        976,
+        240
+      ],
+      "id": "4eb926ac-1407-4974-9007-8f9f2407e144",
+      "name": "mail di cortesia",
+      "webhookId": "69b7a7b5-c475-4b0b-9df4-c2977155e31e",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IOq9QJB5Vxjyyejh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "sendAndWait",
+        "sendTo": "={{ $json.email }}",
+        "subject": "={{ $json.output.subject }} per {{ $json.cognome }}",
+        "message": "={{ $json.output.body }}",
+        "responseType": "freeText",
+        "options": {
+          "limitWaitTime": {
+            "values": {
+              "resumeAmount": 2,
+              "resumeUnit": "days"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1344,
+        -144
+      ],
+      "id": "b7ba8703-ba3e-442c-94b7-f8572a24e317",
+      "name": "mail di followUp",
+      "webhookId": "4e349918-faa1-4e7a-ae62-69b6de52a577",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IOq9QJB5Vxjyyejh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "6213a653-214d-4da1-8b7c-33adcea12a7f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        96,
+        0
+      ],
+      "id": "7c02d244-6e31-414b-a8b7-6947ca5290b4",
+      "name": "Webhook formbriks",
+      "webhookId": "6213a653-214d-4da1-8b7c-33adcea12a7f"
+    },
+    {
+      "parameters": {
+        "content": "MILE",
+        "height": 1056,
+        "width": 2176,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -80,
+        -512
+      ],
+      "typeVersion": 1,
+      "id": "f4e06fcf-42d3-49f7-992d-a3f1ddb62144",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "content": "NON HO INSERITO LE CREDENZIALI",
+        "height": 192,
+        "width": 272
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        2096,
+        -64
+      ],
+      "typeVersion": 1,
+      "id": "7c650247-ce41-4e8c-bca2-17938d93004f",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 23,
+              "triggerAtMinute": 59
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        880
+      ],
+      "id": "405991a8-9789-4c33-82df-1a77c78838bc",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://n8nautohelp.zendesk.com/api/v2/search.json",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "zendeskApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "query",
+              "value": "=type:ticket created>={{ $json.startIso }} created<={{ $json.endIso }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        704,
+        880
+      ],
+      "id": "dd580f88-3136-4909-8dee-b3886d1f0fa3",
+      "name": "ricevo i survey da zendesk",
+      "credentials": {
+        "zendeskApi": {
+          "id": "wu2vr00fBcIV116j",
+          "name": "Zendesk account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const tz = 'Europe/Rome';\nconst now = new Date();\nconst nowTz = new Date(now.toLocaleString('en-US', { timeZone: tz }));\n\nconst startLocal = new Date(nowTz.getFullYear(), nowTz.getMonth(), nowTz.getDate(), 0, 0, 0);\nconst endLocal = new Date(nowTz.getFullYear(), nowTz.getMonth(), nowTz.getDate(), 23, 59, 59);\n\n// Calcolo offset corretto per la TZ\nconst offsetMin = nowTz.getTimezoneOffset(); // minuti\nconst startIso = new Date(startLocal.getTime() - offsetMin * 60000).toISOString();\nconst endIso = new Date(endLocal.getTime() - offsetMin * 60000).toISOString();\n\nreturn [{ startIso, endIso }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        880
+      ],
+      "id": "090f2852-f31e-4920-b59c-a1bc9d4c3362",
+      "name": "Setto data corrente"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        1152,
+        1120
+      ],
+      "id": "b189f83f-6373-4aea-9b67-7a4ebe18a607",
+      "name": "Google Gemini Chat Model2",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "w1znxGmmxUzRvX2t",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n  \"date\": \"2025-10-29\",\n  \"summary\": \"Nella giornata odierna sono stati registrati 5 ticket, con una distribuzione equilibrata tra stati: open (2), solved (2) e pending (1). La priorità è risultata interamente normal, senza casi high/urgent, suggerendo bassa criticità operativa. Il canale prevalente è l’API (4 ticket) con un ticket proveniente da sample_ticket. I tag più frequenti indicano richieste legate a conferme di appuntamento e contenuti in lingua italiana con sentiment neutro. Nel complesso, il carico è contenuto e il flusso appare stabile.\",\n  \"kpi_commentary\": {\n    \"status_insights\": \"Quota open al 40%, solved al 40% e pending al 20%: bilanciamento discreto, backlog moderato sugli open/pending.\",\n    \"priority_insights\": \"Tutte le richieste con priorità normal; nessun caso high/urgent rilevato.\",\n    \"channel_insights\": \"Dominio del canale API (80% dei ticket), segnale di integrazioni o automazioni attive; 1 ticket da sample_ticket.\",\n    \"tags_insights\": \"Ricorrenza di intent__service__appointment__confirmation, language__it e sentiment__neutral: temi ripetitivi, bassa variabilità dei casi.\"\n  },\n  \"recurring_themes\": [\n    {\n      \"theme\": \"Conferma appuntamenti via integrazione\",\n      \"evidence\": [\n        \"Subject/descrizioni ripetono 'ha approvato la collaborazione'\",\n        \"Tag intent__service__appointment__confirmation ricorrente\"\n      ],\n      \"hypothesized_root_cause\": \"Flusso automatico di conferma appuntamenti tramite integrazione API; non emergono anomalie.\"\n    },\n    {\n      \"theme\": \"Contenuti in lingua italiana con tono neutro\",\n      \"evidence\": [\n        \"Tag language__it e sentiment__neutral su 4 ticket\"\n      ],\n      \"hypothesized_root_cause\": \"Traffico standard domestico; assenza di criticità o escalation nel tono.\"\n    }\n  ],\n  \"risks_opportunities\": {\n    \"risks\": [\n      \"Backlog moderato su open/pending se il volume aumenta improvvisamente\",\n      \"Dipendenza operativa dall’integrazione API per la maggior parte dei casi\"\n    ],\n    \"opportunities\": [\n      \"Automatizzare risposte/macro per flusso 'conferma appuntamento'\",\n      \"Monitorare health dell’integrazione API (alert su errori o code 5xx)\",\n      \"Quick FAQ o snippet per richieste ripetitive\"\n    ]\n  },\n  \"actions_for_tomorrow\": [\n    {\n      \"priority\": \"high\",\n      \"action\": \"Verificare backlog open/pending ed evadere entro SLA\",\n      \"owner\": \"Support Team\",\n      \"expected_impact\": \"Riduce backlog open e tempi di attesa\"\n    },\n    {\n      \"priority\": \"medium\",\n      \"action\": \"Creare/raffinare macro per conferme appuntamento ripetitive\",\n      \"owner\": \"Support Ops\",\n      \"expected_impact\": \"Accelera risposte e uniforma la qualità\"\n    },\n    {\n      \"priority\": \"medium\",\n      \"action\": \"Impostare monitoraggio health API con alert su errori\",\n      \"owner\": \"Engineering\",\n      \"expected_impact\": \"Previene accumulo di ticket in caso di disservizi\"\n    },\n    {\n      \"priority\": \"low\",\n      \"action\": \"Preparare mini-FAQ interna per il tema ricorrente\",\n      \"owner\": \"Support Ops\",\n      \"expected_impact\": \"Riduce tempo di gestione per ticket ripetitivi\"\n    }\n  ],\n  \"kpi_snapshot\": {\n    \"total_tickets\": 5,\n    \"by_status\": {\n      \"open\": 2,\n      \"solved\": 2,\n      \"pending\": 1\n    },\n    \"by_priority\": {\n      \"normal\": 5\n    },\n    \"by_channel\": {\n      \"api\": 4,\n      \"sample_ticket\": 1\n    },\n    \"top_tags\": [\n      { \"tag\": \"intent__service__appointment__confirmation\", \"count\": 4 },\n      { \"tag\": \"intent_confidence__low\", \"count\": 4 },\n      { \"tag\": \"language__it\", \"count\": 4 },\n      { \"tag\": \"language_confidence__high\", \"count\": 4 },\n      { \"tag\": \"sentiment__neutral\", \"count\": 4 },\n      { \"tag\": \"sentiment_confidence__high\", \"count\": 4 },\n      { \"tag\": \"zendesk_accelerated_setup\", \"count\": 1 }\n    ]\n  }\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        1328,
+        1120
+      ],
+      "id": "a604b794-5f21-478a-a196-920895220b1d",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "sendTo": "greco.andre96@gmail.com",
+        "subject": "=Report ticket  {{ $json.output.date }}",
+        "message": "={{ $json.output.summary }}, status: {{ $json.output.kpi_commentary.status_insights }}, insights: {{ $json.output.kpi_commentary.channel_insights }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1504,
+        880
+      ],
+      "id": "70ba2f67-c479-4b18-8812-9065010c0280",
+      "name": "Send a message1",
+      "webhookId": "6c5d0097-50a0-47f5-808b-6e4caeb4bcbb",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IOq9QJB5Vxjyyejh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Nodo Function (non Function Item)\n// Input atteso:\n//   items[0].json.results = array di ticket Zendesk (Search API response)\n//   items[0].json.dateLabel (opzionale) = stringa data da usare nel report (es. \"2025-10-29\")\n// Output:\n//   Un singolo item con il report completo pronto per il nodo AI\n\n// Configurazioni semplici\nconst TOP_TAGS_LIMIT = 10;        // quanti top tag mostrare\nconst HIGH_PRIORITY_LIMIT = 5;    // quanti esempi high/urgent includere\nconst SAMPLE_TICKETS_LIMIT = 10;  // quanti ticket di esempio includere con subject/description\nconst MAX_DESCRIPTION_CHARS = 600; // truncate descrizioni lunghe per non saturare il prompt\n\nfunction safeLower(s, fallback = \"unknown\") {\n  if (s === null || s === undefined) return fallback;\n  const st = String(s).trim();\n  return st.length ? st.toLowerCase() : fallback;\n}\n\nfunction sortByValueDescThenKeyAsc(mapObj) {\n  const entries = Object.entries(mapObj);\n  entries.sort((a, b) => {\n    const vcmp = (b[1] || 0) - (a[1] || 0);\n    return vcmp !== 0 ? vcmp : String(a[0]).localeCompare(String(b[0]));\n  });\n  const out = {};\n  for (const [k, v] of entries) out[k] = v;\n  return out;\n}\n\nfunction todayDateUTCString() {\n  const d = new Date();\n  return d.toISOString().slice(0, 10); // yyyy-mm-dd\n}\n\nfunction truncate(str, max) {\n  if (!str) return \"\";\n  const s = String(str);\n  return s.length <= max ? s : s.slice(0, max) + \"…\";\n}\n\n// 1) Leggi i ticket dal nodo precedente\nconst first = items[0]?.json ?? {};\nconst tickets = Array.isArray(first.results) ? first.results : [];\nconst dateLabel = first.dateLabel || todayDateUTCString();\n\n// 2) Aggregatori\nconst byStatus = {};\nconst byPriority = {};\nconst byChannel = {};\nconst tagCount = {};\n\n// 3) Loop sui ticket per i conteggi\nfor (const t of tickets) {\n  // Status\n  const s = safeLower(t.status, \"unknown\");\n  byStatus[s] = (byStatus[s] || 0) + 1;\n\n  // Priority (può essere null)\n  const p = safeLower(t.priority, \"unset\");\n  byPriority[p] = (byPriority[p] || 0) + 1;\n\n  // Channel (via.channel)\n  const c = safeLower(t?.via?.channel, \"unknown\");\n  byChannel[c] = (byChannel[c] || 0) + 1;\n\n  // Tags\n  const tags = Array.isArray(t.tags) ? t.tags : [];\n  for (const tag of tags) {\n    if (!tag) continue;\n    tagCount[tag] = (tagCount[tag] || 0) + 1;\n  }\n}\n\n// 4) Ordinamenti\nconst sortedStatus = sortByValueDescThenKeyAsc(byStatus);\nconst sortedPriority = sortByValueDescThenKeyAsc(byPriority);\nconst sortedChannel = sortByValueDescThenKeyAsc(byChannel);\n\n// 5) Top tag\nconst topTags = Object.entries(tagCount)\n  .sort((a, b) => {\n    const v = (b[1] || 0) - (a[1] || 0);\n    return v !== 0 ? v : String(a[0]).localeCompare(String(b[0]));\n  })\n  .slice(0, TOP_TAGS_LIMIT)\n  .map(([tag, count]) => ({ tag, count }));\n\n// 6) Esempi high-priority\nconst highPriorityExamples = tickets\n  .filter(t => {\n    const p = safeLower(t.priority, \"\");\n    return p === \"high\" || p === \"urgent\";\n  })\n  .sort((a, b) => {\n    const ca = a.created_at || a.createdAt || \"\";\n    const cb = b.created_at || b.createdAt || \"\";\n    return String(ca).localeCompare(String(cb)); // asc\n  })\n  .slice(0, HIGH_PRIORITY_LIMIT)\n  .map(t => ({\n    id: t.id,\n    subject: t.subject || t.raw_subject || \"\",\n    createdAt: t.created_at || t.createdAt || \"\",\n    status: t.status || \"\",\n  }));\n\n// 7) Sample tickets con contesto testuale (subject + description)\nconst sampleTickets = tickets\n  .slice(0, SAMPLE_TICKETS_LIMIT)\n  .map(t => ({\n    id: t.id,\n    subject: t.subject || t.raw_subject || \"\",\n    description: truncate(t.description || \"\", MAX_DESCRIPTION_CHARS),\n    status: t.status || \"\",\n    priority: t.priority || \"\",\n    channel: t?.via?.channel || \"\",\n    createdAt: t.created_at || t.createdAt || \"\",\n    tags: Array.isArray(t.tags) ? t.tags.slice(0, 12) : [] // tag più rilevanti entro un limite\n  }));\n\n// 8) Costruisci il report finale\nconst report = {\n  date: dateLabel,\n  totalTickets: tickets.length,\n  byStatus: sortedStatus,\n  byPriority: sortedPriority,\n  byChannel: sortedChannel,\n  topTags,\n  highPriorityExamples,\n  sampleTickets\n};\n\n// 9) Ritorna un solo item con il report\nreturn [{ json: report }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        928,
+        880
+      ],
+      "id": "0d32b54e-d4c1-475a-a44a-5cad2ea80f53",
+      "name": "normalizzo i dati da dare all'AI"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Sei un analista di Customer Support Operations. Parla in italiano, tono professionale e conciso. Devi generare un report giornaliero basato SOLO sui KPI forniti e su un campione di ticket per il contesto qualitativo.\n\nRegole FONDAMENTALI:\n- L’output DEVE essere un JSON perfettamente valido, senza testo extra, senza markdown, senza backticks.\n- Non inventare numeri: copia i KPI esattamente come forniti.\n- Se un’informazione non è disponibile, scrivi \"dato non disponibile\".\n- Non aggiungere campi oltre a quelli previsti.\nUser:\n\nDati giornalieri per la data: {{$json.date}}\n\nKPI principali:\n- Totale ticket: {{$json.totalTickets}}\n- By status: {{$json.byStatus}}\n- By priority: {{$json.byPriority}}\n- By channel: {{$json.byChannel}}\n- Top tag: {{$json.topTags}}\n\nSample tickets (SOLO per contesto qualitativo, non per conteggi):\n{{ JSON.stringify($json.sampleTickets) }}\n\nGenera un report e restituisci SOLO un JSON valido che rispetti esattamente questa struttura (usa questo esempio come guida per campi e tipi; i contenuti devono riflettere i dati forniti):\n\n{\n  \"date\": \"string (yyyy-mm-dd)\",\n  \"summary\": \"string\",\n  \"kpi_commentary\": {\n    \"status_insights\": \"string\",\n    \"priority_insights\": \"string\",\n    \"channel_insights\": \"string\",\n    \"tags_insights\": \"string\"\n  },\n  \"recurring_themes\": [\n    {\n      \"theme\": \"string\",\n      \"evidence\": [\"string\"],\n      \"hypothesized_root_cause\": \"string\"\n    }\n  ],\n  \"risks_opportunities\": {\n    \"risks\": [\"string\"],\n    \"opportunities\": [\"string\"]\n  },\n  \"actions_for_tomorrow\": [\n    {\n      \"priority\": \"high|medium|low\",\n      \"action\": \"string\",\n      \"owner\": \"string\",\n      \"expected_impact\": \"string\"\n    }\n  ],\n  \"kpi_snapshot\": {\n    \"total_tickets\": number,\n    \"by_status\": { \"string\": number },\n    \"by_priority\": { \"string\": number },\n    \"by_channel\": { \"string\": number },\n    \"top_tags\": [{ \"tag\": \"string\", \"count\": number }]\n  }\n}\n\nVincoli di formattazione:\n- Restituisci SOLO il JSON conforme sopra, nessun testo prima o dopo.\n- Le chiavi devono essere esattamente quelle indicate.\n- I valori di \"kpi_snapshot\" devono essere copiati dai KPI forniti (senza modifiche).",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        1152,
+        880
+      ],
+      "id": "eda44139-714f-48f3-89a1-f680724653bb",
+      "name": "Customer Support"
+    },
+    {
+      "parameters": {
+        "content": "EXTRA MILE",
+        "height": 592,
+        "width": 1488,
+        "color": 2
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        192,
+        688
+      ],
+      "typeVersion": 1,
+      "id": "8fb47997-da13-4d78-9fca-c3b2d54cfaeb",
+      "name": "Sticky Note3"
+    },
+    {
+      "parameters": {
+        "description": "={{ $json.name }} {{ $json.cognome }} ha approvato la collaborazione",
+        "jsonParameters": true,
+        "additionalFieldsJson": "={\n    \"requester\": {\n      \"name\": \"{{ $json.name }} {{ $json.cognome }}\",\n      \"email\": \"{{ $json.email }}\"\n  }\n}"
+      },
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [
+        1808,
+        0
+      ],
+      "id": "3e4db26f-e442-48d5-929b-905ee760a62f",
+      "name": "Crea ticket zendesk",
+      "credentials": {
+        "zendeskApi": {
+          "id": "wu2vr00fBcIV116j",
+          "name": "Zendesk account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "select": "user",
+        "user": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "text": "Notifica zendesk",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        2144,
+        0
+      ],
+      "id": "8055275d-ad9a-4ee8-a4e0-035c018b2e00",
+      "name": "Avviso slack",
+      "webhookId": "6687a777-40c8-4d2f-bc57-51be7b6c64c8",
+      "disabled": true
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Sentiment Analysis",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Sentiment Analysis",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        []
+      ]
+    },
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sentiment Analysis": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          },
+          {
+            "node": "MailGeneretor",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "mail di cortesia",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "mail di cortesia",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Crea ticket zendesk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "MailGeneretor",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "MailGeneretor",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "mail di followUp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MailGeneretor": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mail di cortesia": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mail di followUp": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook formbriks": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Setto data corrente",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Setto data corrente": {
+      "main": [
+        [
+          {
+            "node": "ricevo i survey da zendesk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ricevo i survey da zendesk": {
+      "main": [
+        [
+          {
+            "node": "normalizzo i dati da dare all'AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Customer Support",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "Customer Support",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "normalizzo i dati da dare all'AI": {
+      "main": [
+        [
+          {
+            "node": "Customer Support",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Support": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crea ticket zendesk": {
+      "main": [
+        [
+          {
+            "node": "Avviso slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "8e1cd968-119a-4afb-9308-3a96b24a7127",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "0e4ac09ded0c0ad32cc717491369540a110833fa50e72fb76a6ca117f94221f1"
+  },
+  "id": "A069tZSz76kO2bSz",
+  "tags": []
+}
