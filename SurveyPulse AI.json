@@ -106,70 +106,6 @@
       }
     },
     {
-      "parameters": {
-        "assignments": {
-          "assignments": [
-            {
-              "id": "1277142b-47dd-45b6-b93c-b34d963b1fcd",
-              "name": "name",
-              "value": "=KA",
-              "type": "string"
-            },
-            {
-              "id": "97b82c83-2bb1-4f9e-8173-f16417ea305c",
-              "name": "cognome",
-              "value": "=JAKA",
-              "type": "string"
-            },
-            {
-              "id": "bd80c224-1a26-427c-9eea-106b723f7cec",
-              "name": "email",
-              "value": "=IAJAO@SJSOA.AKS",
-              "type": "string"
-            },
-            {
-              "id": "8d9b6ccd-af2f-4757-aa4d-8deb62df4044",
-              "name": "nazione",
-              "value": "=JSIAO",
-              "type": "string"
-            },
-            {
-              "id": "145d014b-2bd0-4c80-be39-24382fab5023",
-              "name": "budget",
-              "value": "=2000",
-              "type": "string"
-            },
-            {
-              "id": "45085460-2077-4118-9e82-f1b11f7824b5",
-              "name": "motivo interesse",
-              "value": "=IL VOSTRO SERVIZIO è PESSIMO",
-              "type": "string"
-            }
-          ]
-        },
-        "options": {}
-      },
-      "type": "n8n-nodes-base.set",
-      "typeVersion": 3.4,
-      "position": [
-        272,
-        208
-      ],
-      "id": "7cf86073-f0f1-42dc-ab07-0d439c0789bd",
-      "name": "Edit Fields1"
-    },
-    {
-      "parameters": {},
-      "type": "n8n-nodes-base.manualTrigger",
-      "typeVersion": 1,
-      "position": [
-        80,
-        208
-      ],
-      "id": "33802e6a-83e5-4ccd-86f2-2c45f55e7409",
-      "name": "When clicking ‘Execute workflow’"
-    },
-    {
       "parameters": {},
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
@@ -179,21 +115,6 @@
       ],
       "id": "7ea97d23-ae00-470e-9d22-be02c764bae2",
       "name": "No Operation, do nothing"
-    },
-    {
-      "parameters": {
-        "mode": "combine",
-        "combineBy": "combineByPosition",
-        "options": {}
-      },
-      "type": "n8n-nodes-base.merge",
-      "typeVersion": 3.2,
-      "position": [
-        1584,
-        -48
-      ],
-      "id": "a83703e3-666c-4148-a5b6-f205d1df5e2d",
-      "name": "Merge"
     },
     {
       "parameters": {
@@ -298,38 +219,6 @@
     },
     {
       "parameters": {
-        "operation": "sendAndWait",
-        "sendTo": "={{ $json.email }}",
-        "subject": "={{ $json.output.subject }} per {{ $json.cognome }}",
-        "message": "={{ $json.output.body }}",
-        "responseType": "freeText",
-        "options": {
-          "limitWaitTime": {
-            "values": {
-              "resumeAmount": 2,
-              "resumeUnit": "days"
-            }
-          }
-        }
-      },
-      "type": "n8n-nodes-base.gmail",
-      "typeVersion": 2.1,
-      "position": [
-        1344,
-        -144
-      ],
-      "id": "b7ba8703-ba3e-442c-94b7-f8572a24e317",
-      "name": "mail di followUp",
-      "webhookId": "4e349918-faa1-4e7a-ae62-69b6de52a577",
-      "credentials": {
-        "gmailOAuth2": {
-          "id": "IOq9QJB5Vxjyyejh",
-          "name": "Gmail account"
-        }
-      }
-    },
-    {
-      "parameters": {
         "httpMethod": "POST",
         "path": "6213a653-214d-4da1-8b7c-33adcea12a7f",
         "options": {}
@@ -354,26 +243,11 @@
       "type": "n8n-nodes-base.stickyNote",
       "position": [
         -80,
-        -512
+        -528
       ],
       "typeVersion": 1,
       "id": "f4e06fcf-42d3-49f7-992d-a3f1ddb62144",
       "name": "Sticky Note1"
-    },
-    {
-      "parameters": {
-        "content": "NON HO INSERITO LE CREDENZIALI",
-        "height": 192,
-        "width": 272
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "position": [
-        2096,
-        -64
-      ],
-      "typeVersion": 1,
-      "id": "7c650247-ce41-4e8c-bca2-17938d93004f",
-      "name": "Sticky Note2"
     },
     {
       "parameters": {
@@ -548,8 +422,8 @@
       "type": "n8n-nodes-base.zendesk",
       "typeVersion": 1,
       "position": [
-        1808,
-        0
+        1872,
+        -1024
       ],
       "id": "3e4db26f-e442-48d5-929b-905ee760a62f",
       "name": "Crea ticket zendesk",
@@ -558,7 +432,8 @@
           "id": "wu2vr00fBcIV116j",
           "name": "Zendesk account"
         }
-      }
+      },
+      "disabled": true
     },
     {
       "parameters": {
@@ -574,13 +449,646 @@
       "type": "n8n-nodes-base.slack",
       "typeVersion": 2.3,
       "position": [
-        2144,
-        0
+        2096,
+        -832
       ],
       "id": "8055275d-ad9a-4ee8-a4e0-035c018b2e00",
       "name": "Avviso slack",
       "webhookId": "6687a777-40c8-4d2f-bc57-51be7b6c64c8",
       "disabled": true
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.email }}",
+        "subject": "=n8nAutomation per {{ $json.name }}",
+        "message": "={{ $json.output.body }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1264,
+        -272
+      ],
+      "id": "528c5ae4-13a6-4346-ad96-8e7cdb074c72",
+      "name": "Send a message",
+      "webhookId": "e05ff07f-033b-4eaa-8b91-8b598e2f4cca",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IOq9QJB5Vxjyyejh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "051c7f01-6d61-4ab2-b06e-b86abbcb87ef",
+              "name": "threadId",
+              "value": "={{ $json.threadId }}",
+              "type": "string"
+            },
+            {
+              "id": "0e2bc622-4b18-480d-93dc-a46efcfbcc28",
+              "name": "email",
+              "value": "={{ $('Merge1').item.json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "3124253b-7853-4fd0-b4ae-f409ad3bf4f2",
+              "name": "createdAt",
+              "value": "={{ $('Merge1').item.json.createdAt }}",
+              "type": "string"
+            },
+            {
+              "id": "467311c3-f43e-4294-accd-e8921926e915",
+              "name": "name",
+              "value": "={{ $('Merge1').item.json.name }}",
+              "type": "string"
+            },
+            {
+              "id": "5b6b715b-f251-4875-b016-6805f5bf9acc",
+              "name": "cognome",
+              "value": "={{ $('Merge1').item.json.cognome }}",
+              "type": "string"
+            },
+            {
+              "id": "7cddfb50-3cf1-473c-8cf9-d1df0dda0ae0",
+              "name": "status",
+              "value": "in attesa",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1440,
+        -288
+      ],
+      "id": "66ce1b3d-f987-4324-aafa-d8f34d4f0bac",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0",
+          "mode": "list",
+          "cachedResultName": "lead da controllare",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "threadId": "={{ $json.threadId }}",
+            "email": "={{ $json.email }}",
+            "createdAt": "={{ $json.createdAt }}",
+            "name": "={{ $json.name }}",
+            "surname": "={{ $json.cognome }}",
+            "status": "={{ $json.status }}"
+          },
+          "matchingColumns": [
+            "threadId"
+          ],
+          "schema": [
+            {
+              "id": "threadId",
+              "displayName": "threadId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "surname",
+              "displayName": "surname",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1632,
+        -272
+      ],
+      "id": "42b7542b-529b-4933-b685-f3067eb732e2",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Wv6gL9BsteNrkqkR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        80,
+        -832
+      ],
+      "id": "401cb233-6fa7-4c2b-b5cd-037b092d9cff",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0",
+          "mode": "list",
+          "cachedResultName": "lead da controllare",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "status",
+              "lookupValue": "in attesa"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        304,
+        -832
+      ],
+      "id": "4b832e6f-a4f5-42e3-9828-3142cef8a5e9",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Wv6gL9BsteNrkqkR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        528,
+        -832
+      ],
+      "id": "61bb4d00-b97b-44b0-a0b3-6545c78dcbe6",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $json.messages[0].To }}",
+        "subject": "=Si inizia!",
+        "message": "=perfetto allora iniziamo [variabile data dell'utente]",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1648,
+        -1024
+      ],
+      "id": "68364c15-709b-4be1-89d6-45deeb92d1d2",
+      "name": "mail di followUp1",
+      "webhookId": "4e349918-faa1-4e7a-ae62-69b6de52a577",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IOq9QJB5Vxjyyejh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c0f5abd3-cf01-4f83-9a55-3f39b822b3d1",
+              "leftValue": "={{ $json.messages }}",
+              "rightValue": 1,
+              "operator": {
+                "type": "array",
+                "operation": "lengthGt",
+                "rightType": "number"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        976,
+        -976
+      ],
+      "id": "89e6caf5-339f-49a7-a14e-030f67893e3a",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0",
+          "mode": "list",
+          "cachedResultName": "lead da controllare",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "RISPOSTO",
+            "threadId": "={{ $json.messages[0].threadId }}"
+          },
+          "matchingColumns": [
+            "threadId"
+          ],
+          "schema": [
+            {
+              "id": "threadId",
+              "displayName": "threadId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "surname",
+              "displayName": "surname",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1200,
+        -1144
+      ],
+      "id": "0ef4297b-8234-4184-8de4-47cd5353f5f3",
+      "name": "Update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Wv6gL9BsteNrkqkR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "d4cfa564-adbe-4ce3-8275-e31feb13ad9f",
+              "leftValue": "={{ $now.diff(DateTime.fromISO($json.createdAt), 'days').days > 7 }}",
+              "rightValue": "={{ $now.diff(DateTime.fromISO($('Loop Over Items').item.json.createdAt), 'days').days > 7 }}",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        -832
+      ],
+      "id": "550106ed-fb0e-4328-978b-12c54b7880c9",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0",
+          "mode": "list",
+          "cachedResultName": "lead da controllare",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Foglio1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1Ac48FSAWcJV1joDdeCSYWc9wdIL1TUm1krYR8oAd-j0/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "SCADUTO",
+            "threadId": "{{ $json.messages[0].threadId }}"
+          },
+          "matchingColumns": [
+            "threadId"
+          ],
+          "schema": [
+            {
+              "id": "threadId",
+              "displayName": "threadId",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "email",
+              "displayName": "email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "createdAt",
+              "displayName": "createdAt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "name",
+              "displayName": "name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "surname",
+              "displayName": "surname",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        1424,
+        -832
+      ],
+      "id": "49a23ec9-abad-4ccc-ba20-ee268a4884df",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Wv6gL9BsteNrkqkR",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "thread",
+        "operation": "get",
+        "threadId": "={{ $json.threadId }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        752,
+        -976
+      ],
+      "id": "4b866620-9032-4b83-be07-8d163a82274a",
+      "name": "Get a thread1",
+      "webhookId": "125c0d21-2454-41ef-a40b-b076cb672ba2",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "IOq9QJB5Vxjyyejh",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        752,
+        -1168
+      ],
+      "id": "cb839982-4dc6-419a-a8f6-e264d02f8a39",
+      "name": "No Operation, do nothing1"
+    },
+    {
+      "parameters": {
+        "mode": "combine",
+        "combineBy": "combineByPosition",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1424,
+        -1024
+      ],
+      "id": "871f35e1-cf19-41d7-9336-d2396bf2eb44",
+      "name": "Merge"
     }
   ],
   "pinData": {},
@@ -607,30 +1115,9 @@
         ]
       ]
     },
-    "Edit Fields1": {
-      "main": [
-        []
-      ]
-    },
-    "When clicking ‘Execute workflow’": {
-      "main": [
-        [
-          {
-            "node": "Edit Fields1",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
     "Sentiment Analysis": {
       "main": [
         [
-          {
-            "node": "Merge",
-            "type": "main",
-            "index": 1
-          },
           {
             "node": "MailGeneretor",
             "type": "main",
@@ -652,17 +1139,6 @@
         [
           {
             "node": "mail di cortesia",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "Merge": {
-      "main": [
-        [
-          {
-            "node": "Crea ticket zendesk",
             "type": "main",
             "index": 0
           }
@@ -695,7 +1171,7 @@
       "main": [
         [
           {
-            "node": "mail di followUp",
+            "node": "Send a message",
             "type": "main",
             "index": 0
           }
@@ -718,17 +1194,6 @@
         [
           {
             "node": "No Operation, do nothing",
-            "type": "main",
-            "index": 0
-          }
-        ]
-      ]
-    },
-    "mail di followUp": {
-      "main": [
-        [
-          {
-            "node": "Merge",
             "type": "main",
             "index": 0
           }
@@ -838,15 +1303,189 @@
       "main": [
         []
       ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        []
+      ]
+    },
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [
+          {
+            "node": "No Operation, do nothing1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a thread1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ],
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mail di followUp1": {
+      "main": [
+        [
+          {
+            "node": "Crea ticket zendesk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a thread1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "mail di followUp1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update row in sheet1": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avviso slack": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1",
     "callerPolicy": "workflowsFromSameOwner",
     "availableInMCP": false
   },
-  "versionId": "8e1cd968-119a-4afb-9308-3a96b24a7127",
+  "versionId": "62ce97b0-4739-45d6-865a-e08b0a762c00",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "0e4ac09ded0c0ad32cc717491369540a110833fa50e72fb76a6ca117f94221f1"
