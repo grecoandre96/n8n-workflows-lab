@@ -1,0 +1,797 @@
+{
+  "name": "RAGGED chatbot",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -512,
+        -80
+      ],
+      "id": "ad7b92ac-9d4a-4c8d-a01c-946272474fdf",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "operation": "download",
+        "fileId": {
+          "__rl": true,
+          "value": "1xdBnpUpDQXbIVY__Kvy_PbjUo-i-Zkgl",
+          "mode": "list",
+          "cachedResultName": "ai_agents_for_trading.txt",
+          "cachedResultUrl": "https://drive.google.com/file/d/1xdBnpUpDQXbIVY__Kvy_PbjUo-i-Zkgl/view?usp=drivesdk"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        -288,
+        -88
+      ],
+      "id": "2bdf427b-62e3-4a17-a1ef-78c837f21c62",
+      "name": "Download file",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "fsoUK4K0BrGgMvC6",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        -64,
+        -192
+      ],
+      "id": "1d5a852d-381d-4827-a82f-a6c6d10233fd",
+      "name": "Supabase Vector Store",
+      "credentials": {
+        "supabaseApi": {
+          "id": "5D3aCQOLsfZWxXbY",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -56,
+        32
+      ],
+      "id": "270a206c-7c87-4f31-ad46-3a073bb3a4b5",
+      "name": "Embeddings Google Gemini",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Krezd7rMB4KzkkBb",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "public": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -512,
+        672
+      ],
+      "id": "fbf815d7-e34a-46e9-9577-d18511a28d5f",
+      "name": "When chat message received",
+      "webhookId": "51104887-7daa-4527-a762-367c49e2638e"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -64,
+        896
+      ],
+      "id": "795c77ea-f340-4f2b-8fca-1aeddb7eb933",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Krezd7rMB4KzkkBb",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        896
+      ],
+      "id": "6c0b47e4-4925-4640-b033-16a0fd9c944f",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "mode": "retrieve-as-tool",
+        "toolDescription": "Recupera i documenti più semanticamente rilevanti dal database vettoriale di Supabase. Questi documenti fungono da contesto esterno per l'AI Agent, arricchendo le sue risposte con informazioni specifiche e aggiornate, essenziali per il funzionamento del pattern RAG (Retrieval Augmented Generation).",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.3,
+      "position": [
+        192,
+        896
+      ],
+      "id": "6f007df8-9d53-461a-8898-4a1ccf25161f",
+      "name": "Supabase Vector Store3",
+      "credentials": {
+        "supabaseApi": {
+          "id": "5D3aCQOLsfZWxXbY",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        272,
+        1104
+      ],
+      "id": "523f922b-c9df-48dd-a8fd-f1510a2f284d",
+      "name": "Embeddings Google Gemini3",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "Krezd7rMB4KzkkBb",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataType": "binary",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        80,
+        32
+      ],
+      "id": "6194fd5d-3705-476a-af22-08e8178e9487",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "tableId": "documents",
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        -288,
+        240
+      ],
+      "id": "539b0d45-bb59-4634-9f0b-e2f55c6bb98a",
+      "name": "Get All Documents",
+      "credentials": {
+        "supabaseApi": {
+          "id": "5D3aCQOLsfZWxXbY",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst seen = new Set();\nconst duplicateIds = [];\n\n// Ordina per data (più recenti prima)\nitems.sort((a, b) => \n  new Date(b.json.created_at) - new Date(a.json.created_at)\n);\n\n// Identifica duplicati\nitems.forEach(item => {\n  const content = item.json.content;\n  const id = item.json.id;\n  \n  if (seen.has(content)) {\n    // È un duplicato, marca per cancellazione\n    duplicateIds.push(id);\n  } else {\n    // È unico, conservalo\n    seen.add(content);\n  }\n});\n\nconsole.log(`Trovati ${duplicateIds.length} duplicati da eliminare`);\n\nreturn [{ \n  json: { \n    duplicateIds,\n    count: duplicateIds.length,\n    uniqueCount: seen.size\n  } \n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -64,
+        240
+      ],
+      "id": "2dfab8ee-32d2-45dc-b65c-739d05053abf",
+      "name": "Identify Duplicates"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "tableId": "documents",
+        "matchType": "allFilters",
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "id",
+              "condition": "eq",
+              "keyValue": "={{ $json.duplicateIds }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.supabase",
+      "typeVersion": 1,
+      "position": [
+        608,
+        240
+      ],
+      "id": "4fb7cda2-29fe-45ea-b855-72e015921e08",
+      "name": "Delete a row",
+      "credentials": {
+        "supabaseApi": {
+          "id": "5D3aCQOLsfZWxXbY",
+          "name": "Supabase account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [
+        384,
+        240
+      ],
+      "id": "abb1059f-82e2-4e2c-a2bd-03faa6a9e58a",
+      "name": "Loop Over Items"
+    },
+    {
+      "parameters": {
+        "fieldToSplitOut": "duplicateIds",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.splitOut",
+      "typeVersion": 1,
+      "position": [
+        160,
+        240
+      ],
+      "id": "906b2462-2fcf-4a05-8e85-eac6bdbfdb37",
+      "name": "Split Out"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -512,
+        240
+      ],
+      "id": "f302176c-7409-44a4-b4fc-9435e1b6d08d",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "content": "POPOLA IL DATABASE E ELIMINA I DUPLICATI",
+        "height": 816,
+        "width": 1840,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -784,
+        -368
+      ],
+      "typeVersion": 1,
+      "id": "a77fc0be-042e-4a63-ae8b-8d4cfa9db224",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {
+        "content": "RAGGED CHATBOT",
+        "height": 800,
+        "width": 1776,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -640,
+        448
+      ],
+      "typeVersion": 1,
+      "id": "2a928a78-ceae-4498-aa6d-c1b09ca38549",
+      "name": "Sticky Note1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "5892d60a-49b2-4312-9485-a704a5b663d0",
+              "name": "chatInput",
+              "value": "={{ $json.chatInput }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -288,
+        672
+      ],
+      "id": "12240ec8-bc0f-4781-8d3a-fb9869a96dcb",
+      "name": "Prompt message"
+    },
+    {
+      "parameters": {
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "=Sei un assistente AI che RISPONDE SOLO a domande direttamente pertinenti ai file recuperati dallo strumento 'Supabase Vector Store3'. Riceverai sempre (quando disponibili) i documenti recuperati come contesto esterno. Regole obbligatorie — leggile e applicale rigidamente:\n\nScopo: valuta la domanda contenuta in {{ $json.chatInput }} e determina se è una domanda pertinente ai documenti forniti da Supabase Vector Store3.\nPertinenza:\nSe ALMENO un documento restituito è direttamente rilevante per la domanda, genera una risposta basata ESCLUSIVAMENTE sulle informazioni presenti in quei documenti. Non introdurre conoscenza esterna.\nSe NESSUN documento è rilevante, NON fornire contenuto libero o risposte basate su conoscenza esterna: restituisci un oggetto strutturato con pertinent: false e answer vuoto (stringa vuota). Non scrivere altro in output testuale.\nOutput obbligatorio e unico:\nL'unica cosa che devi produrre come output è un JSON valido con due campi:\npertinent (boolean): true se la domanda è stata soddisfatta usando i documenti; false altrimenti.\nanswer (string): testo della risposta completa SOLO SE pertinent è true; altrimenti stringa vuota.\nNon stampare, spiegare o allegare nulla fuori da questo JSON. Nessun testo libero, nessuna nota di debug.\nFormato della risposta quando pertinent = true:\nLa risposta deve essere concisa, tecnica e citare (se possibile) il file_id o il titolo del documento da cui è tratta l'informazione (es.: \"[file_id: xyz123]\"). Puoi includere riferimenti a paragrafi o timestamp se presenti nei metadati.\nIncludi numeri, livelli o esempi concreti quando rilevante per la domanda (soprattutto per contenuti di trading), ma solo se provengono dai documenti.\nAmbiguità: se non sei sicuro della pertinenza, considera la domanda non pertinente (pertinent: false) e non rispondere con contenuto inventato.\nValidazione: il JSON prodotto deve essere strict JSON (doppie virgolette, nessun trailing comma). Deve essere l'unico contenuto dell'output.\nEsempio di comportamento:\n\nQuery pertinente -> restituisci JSON con pertinent: true e answer popolata con risposta basata sui documenti e citazione della fonte.\nQuery non pertinente -> restituisci JSON con pertinent: false e answer: \"\" (stringa vuota).\nRispondi ESATTAMENTE in questo formato e NIENT'ALTRO.\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        96,
+        672
+      ],
+      "id": "45b5f933-4b0d-4a5b-9ff3-4d491df30398",
+      "name": "ChatBot"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"pertinante\": \"true or false\",\n\t\"anser\": [\"anser for user\"]\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        480,
+        896
+      ],
+      "id": "910c8763-444a-4da8-bb7b-883156ef3cfc",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "operation": "create",
+        "base": {
+          "__rl": true,
+          "value": "appLfnyJCsrwTOzs1",
+          "mode": "list",
+          "cachedResultName": "Untitled Base",
+          "cachedResultUrl": "https://airtable.com/appLfnyJCsrwTOzs1"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblje3A0rpKkmgiWF",
+          "mode": "list",
+          "cachedResultName": "Table 1",
+          "cachedResultUrl": "https://airtable.com/appLfnyJCsrwTOzs1/tblje3A0rpKkmgiWF"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "testo AI": "={{ $json.output.anser[0] }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "testo AI",
+              "displayName": "testo AI",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Notes",
+              "displayName": "Notes",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "options",
+              "options": [
+                {
+                  "name": "Todo",
+                  "value": "Todo"
+                },
+                {
+                  "name": "In progress",
+                  "value": "In progress"
+                },
+                {
+                  "name": "Done",
+                  "value": "Done"
+                }
+              ],
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Attachments",
+              "displayName": "Attachments",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "array",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Attachment Summary",
+              "displayName": "Attachment Summary",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtable",
+      "typeVersion": 2.1,
+      "position": [
+        912,
+        576
+      ],
+      "id": "ec161d3f-0b1f-4d51-9a8a-892bb0488e33",
+      "name": "Create a record in AirTable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "sNZxUGBjSxdgs94N",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "0a08cde3-393c-402f-94dd-316092233da1",
+              "leftValue": "={{ $json.output.pertinante }}",
+              "rightValue": "true",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        688,
+        672
+      ],
+      "id": "b6619a61-c9fb-45d9-aa6f-e2ed608c0b4f",
+      "name": "Answer is good?"
+    },
+    {
+      "parameters": {
+        "description": "AI answer",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.zendesk",
+      "typeVersion": 1,
+      "position": [
+        912,
+        768
+      ],
+      "id": "2be7310b-066e-4342-895a-a1e301d718ed",
+      "name": "Create a ticket",
+      "credentials": {
+        "zendeskApi": {
+          "id": "bSpmYVqGX3mgfcuT",
+          "name": "Zendesk account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Download file",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download file": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store": {
+      "main": [
+        []
+      ]
+    },
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "Prompt message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ChatBot",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "ChatBot",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supabase Vector Store3": {
+      "ai_tool": [
+        [
+          {
+            "node": "ChatBot",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini3": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store3",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get All Documents": {
+      "main": [
+        [
+          {
+            "node": "Identify Duplicates",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Identify Duplicates": {
+      "main": [
+        [
+          {
+            "node": "Split Out",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Delete a row": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Loop Over Items": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Delete a row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Out": {
+      "main": [
+        [
+          {
+            "node": "Loop Over Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Get All Documents",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt message": {
+      "main": [
+        [
+          {
+            "node": "ChatBot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ChatBot": {
+      "main": [
+        [
+          {
+            "node": "Answer is good?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "ChatBot",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Answer is good?": {
+      "main": [
+        [
+          {
+            "node": "Create a record in AirTable",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Create a ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "dfb6dc3f-646c-420c-8b0f-10dcbe3bf137",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "de8fc1a35dec23ba566fa9ffb61271558154c6f91ce79bc22f0943af8d4de15c"
+  },
+  "id": "ToKJLkST6HCe1yvA",
+  "tags": []
+}
